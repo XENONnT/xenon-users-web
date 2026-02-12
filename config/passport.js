@@ -105,7 +105,8 @@ async function PopulateProfile(mongo_doc, github_profile, ldap_profile, callback
     var extra_fields = ['skype', 'github_id', 'cell', 'email', 'lngs_ldap_uid',
                         'last_name', 'first_name', 'institute', 'position',
                         'percent_xenon', 'start_date', 'LNGS', 'github', 'orcid',
-                        'picture_url', 'github_home', 'api_username', 'groups'];
+                        'picture_url', 'github_home', 'api_username', 'groups',
+		        'email_mailing_lists','mailing_lists'];
     for(var i in extra_fields){
         if(typeof mongo_doc[extra_fields[i]]==='undefined')
             ret_profile[extra_fields[i]] = "not set";

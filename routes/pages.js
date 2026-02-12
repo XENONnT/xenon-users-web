@@ -187,7 +187,7 @@ router.get('/profile', ensureAuthenticated, function(req, res){
       pending: doc,
       slackLink: process.env.SLACK_INVITE, 
       title: name, 
-      user: req.user, 
+      user: req.user,
       base_url: base
     }
   );

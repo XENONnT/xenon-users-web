@@ -43,6 +43,7 @@ var transporter = nodemailer.createTransport({
 var landingRouter = require('./routes/pages');
 var userRouter = require('./routes/users'); 
 var instituteRouter = require('./routes/institutes');
+var mailinglistsRouter = require('./routes/mailinglists');
 var authRouter = require('./routes/auth');
 var shiftRouter = require('./routes/shifts');
 var adminRouter = require('./routes/admin');
@@ -110,6 +111,7 @@ app.use((req,res,next) => {
 app.use('/', landingRouter);
 app.use('/users', userRouter);
 app.use('/institutes', instituteRouter);
+app.use('/mailinglists', mailinglistsRouter);
 app.use('/auth', authRouter);
 app.use('/shifts', shiftRouter);
 app.use('/admin', adminRouter);

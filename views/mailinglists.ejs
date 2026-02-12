@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('components/head', {base_url: base_url}); %>
+</head>
+<body>
+  <%- include('components/menu', {base_url: base_url}); %> 
+<div class="container-fluid bg-3 text-center">  
+  <div class="row">
+    <div class="col-sm-6">
+      <h2 style="color:#031424;float:left;padding: 15px 0px 0px 35px;padding-bottom:20px;">Mailing lists</h2>
+    </div>
+  </div>  
+  <div class="row">
+    <div class="col-sm-12">
+      <% for (const key in mailing_lists) {%>
+          <h4 style="width:100%;background-color:#f0f0f0;color:black;margin-top:5px;padding:10px; border-radius: 15px 15px 15px 15px"><%=key%></h4>
+          <h4 style="text-align:left;padding:3px;font-size:14px"><%=[...mailing_lists[key]].join(', ')%></h4>
+	  &nbsp; &nbsp; &nbsp; &nbsp;
+      <%}%>
+    </div>
+  </div>
+  <hr>
+  <br>
+</div>
+</body>
+</html>

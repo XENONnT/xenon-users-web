@@ -26,13 +26,14 @@ function NewUserMail(req, mailing_lists, callback) {
       '<p>A new member has been added by ' + req.user.first_name + ' ' +
         req.user.last_name + '</p>' +
       '<p>a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
-      'b) email: ' + req.body.Email + '<br>' +
+      'b) E-Mail: ' + req.body.Email + '<br>' +
       'c) Position: ' + req.body.position + '<br>' +
       'd) Time: ' + req.body.Time + '%<br>' +
       'e) Tasks: ' + req.body.Tasks + '<br>' +
-      'f) Mailing lists: ' + mailing_lists + '<br>' +
-      'g) Start date: ' + req.body.StartDate + '<br>' +
-      'h) End date: ' + req.body.expectedEnd + '</p>' +
+      'f) E-Mail mailing lists: ' + req.body.Email_Mailing_Lists + '<br>' +
+      'g) Mailing lists: ' + mailing_lists + '<br>' +
+      'h) Start date: ' + req.body.StartDate + '<br>' +
+      'i) End date: ' + req.body.expectedEnd + '</p>' +
       '<p>Regards,<br>XENON User Management System</p>'
   };
   
@@ -59,15 +60,16 @@ function PendingUserMail(req, mailing_lists, callback) {
     html: '<p>Dear Collaboration Board,</p>' + 
       `<p>Please review the new membership request that was made by ${req.user.first_name} ${req.user.last_name}. The information is as follows: </p>` +
       '<p>a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
-      'b) Email: ' + req.body.Email + '<br>' +
+      'b) E-Mail: ' + req.body.Email + '<br>' +
       'c) Position: ' + req.body.position + '<br>' +
       'd) Institute: ' + req.body.institute + '<br>' +
       'e) Time: ' + req.body.Time + '%<br>' +
       'f) Tasks: ' + req.body.Tasks + '<br>' +
-      'g) Mailing lists: ' + mailing_lists + '<br>' +
-      'h) Start date: ' + req.body.StartDate + '<br>' +
-      'i) End date: ' + req.body.expectedEnd + '<br>' +
-      'j) Comments: ' + req.body.comments + '</p>' +
+      'g) E-Mail mailing lists: ' + req.body.Email_Mailing_Lists + '<br>' +
+      'h) Mailing lists: ' + mailing_lists + '<br>' +
+      'i) Start date: ' + req.body.StartDate + '<br>' +
+      'j) End date: ' + req.body.expectedEnd + '<br>' +
+      'k) Comments: ' + req.body.comments + '</p>' +
       '<p>Collaboration board: Please reply to all in this email thread if you would ' +
         'like a discussion in CB or more information on this member proposal. If you agree with the new member, do nothing. ' +
         'For instructions on how to use this system to submit your own members or other user management' +
@@ -229,13 +231,14 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
     idoc["cell"] = req.body.cell;
     req.user.cell = req.body.cell;
   }
-  
-  //orcid
+  if (req.body.email_mailing_lists != "" && req.user.email_mailing_lists != req.body.email_mailing_lists) {
+    idoc['email_mailing_lists'] = req.body.email_mailing_lists;
+    req.user.email_mailing_lists = req.body.email_mailing_lists;
+  }
   if (req.body.orcid != "" && req.user.orcid != req.body.orcid) {	
     idoc["orcid"] = req.body.orcid;
     req.user.orcid = req.body.orcid;
   }
-
   if (req.body.favorite_color != "" && req.user.favorite_color != req.body.favorite_color) {
     idoc["favorite_color"] = req.body.favorite_color;
     req.user.favorite_color = req.body.favorite_color;
@@ -291,7 +294,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
       }
     }
     console.log(lists);
-    lists.push('xe-all');
+//    lists.push('xe-all');
 
     idoc['first_name'] = req.body.FirstName;
     if (idoc['first_name'] != previous_doc['first_name']) {
@@ -304,6 +307,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
       changes += 'Last Name: ' + req.body.LastName + '<br>';
     }
     idoc['email'] = req.body.Email;
+    idoc['email_mailing_lists'] = req.body.Email_Mailing_Lists;
     idoc['mailing_lists'] = lists;
 
     if (req.body.institute != null) {
@@ -408,12 +412,13 @@ router.post('/adduser', ensureAuthenticated, function(req, res) {
     }
   }
   console.log(lists);
-  lists.push('xe-all');
+//  lists.push('xe-all');
   mailing_lists += lists.join(", ")
 
   idoc['first_name'] = req.body.FirstName;
   idoc['last_name'] = req.body.LastName;
   idoc['email'] = req.body.Email;
+  idoc['email_mailing_lists'] = req.body.Email_Mailing_Lists;
   idoc['institute'] = req.body.institute;
   idoc['position'] = req.body.position;
   idoc['percent_xenon'] = req.body.Time;
@@ -467,12 +472,13 @@ router.post('/pendinguser', function(req, res) {
     }
   }
   console.log(lists);
-  lists.push('xe-all');
+//  lists.push('xe-all');
   idoc['pending'] = true;
   idoc['req_date'] = new Date();
   idoc['first_name'] = req.body.FirstName;
   idoc['last_name'] = req.body.LastName;
   idoc['email'] = req.body.Email;
+  idoc['email_mailing_lists'] = req.body.Email_Mailing_Lists;
   idoc['institute'] = req.body.institute;
   idoc['position'] = req.body.position;
   idoc['percent_xenon'] = req.body.Time;

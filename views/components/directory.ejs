@@ -10,11 +10,13 @@
         <summary> <%=curr[i].last_name + ", " + curr[i].first_name %></summary>
         <p>
           <b>Institute: </b><%= curr[i].institute %><br>
-          <b>Email: </b><%= curr[i].email%> <br>
+          <b>E-Mail: </b><%= curr[i].email%> <br>
           <b>Position: </b><%= curr[i].position%> <br>
           <b>Start Date: </b><%= curr[i].start_date%><br>
-          <b>End Date: </b><%= curr[i].end_date%>
-        </p>
+          <b>End Date: </b><%= curr[i].end_date%><br>
+          <b>E-Mail Mailing Lists: </b><%= curr[i].email_mailing_lists%><br>
+          <b>Lists: </b><%= JSON.stringify(curr[i].mailing_lists)%>
+	</p>
         <br>
         <!-- make this button available only if authorized as admin/PI-->
         <% if ((user.position == "PI")) {%>
@@ -31,10 +33,12 @@
         </summary>
         <p>
           <b>Institute: </b><%= prev[i].institute %><br>
-          <b>Email: </b><%= prev[i].email%> <br>
+          <b>E-Mail: </b><%= prev[i].email%> <br>
           <b>Position: </b><%= prev[i].position%> <br>
           <b>Start Date: </b><%= prev[i].start_date%> <br>
-          <b>End Date: </b><%= prev[i].end_date%>
+          <b>End Date: </b><%= prev[i].end_date%><br>
+          <b>E-Mail Mailing Lists: </b><%= prev[i].email_mailing_lists%><br>
+          <b>Lists: </b><%= JSON.stringify(prev[i].mailing_lists)%>	  
         </p>
         <br>
       </details>

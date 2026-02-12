@@ -43,7 +43,7 @@
                         <table>
                             <h6 style="color:#aaa;letter-spacing:.7px;padding-top:10px;padding-bottom:10px">CONTACT INFO</h6>
                             <tr>
-                                <td style="width:150px"><strong>E-mail:</strong></td>
+                                <td style="width:200px"><strong>E-mail:</strong></td>
                                 <td><%= user.email %></td>
                             </tr>
                             <tr>
@@ -66,12 +66,23 @@
                         <h6 style="color:#aaa;letter-spacing:.7px;padding-top:10px;padding-bottom:10px">ACCOUNTS</h6>
                         <table>
                             <tr>
-                                <td style="width:150px"><strong>GitHub ID:</strong></td>
+                                <td style="width:200px"><strong>GitHub ID:</strong></td>
                                 <td><%= user.github %></td>
                             </tr>
                             <tr>
                                 <td><strong>LNGS ID:</strong></td>
                                 <td><%= user.lngs_ldap_uid %></td>
+                            </tr>
+                        </table>
+                        <h6 style="color:#aaa;letter-spacing:.7px;padding-top:10px;padding-bottom:10px">MAILING LISTS</h6>
+                        <table>
+                            <tr>
+                                <td style="width:200px"><strong>E-mail Mailing Lists:</strong></td>
+                                <td><%= user.email_mailing_lists %></td><!-- to modify when email mailing list available -->
+                            </tr>
+                            <tr>
+                                <td style="width:150px"><strong>Lists:</strong></td>
+                                <td><%= JSON.stringify(user.mailing_lists) %></td>
                             </tr>
                         </table>
                     </div>
@@ -173,7 +184,7 @@
                     <div class="modal-body">
                         <form method="post" action="users/updateContactInfo">
                             <div class="form-group">
-                                <label class="form-label" for="email">Email</label>
+                                <label class="form-label" for="email">E-Mail</label>
                                 <input class="form-control" type="email" value="<%= user.email %>" name="email">
                             </div>
                             <div class="form-group">
@@ -196,6 +207,10 @@
                                 <label class="form-label" for="orcid">ORCID iD</label>
                                 <small class="form-text text-muted">Must be a 16-digit number, with the last digit possibly being 'X'</small>
                                 <input id="orcid" class="form-control" type="text" value="<%= user.orcid %>" pattern="\d{15}(\d|X)" title="ORCID iD must be a 16-digit number, with the last digit possibly being 'X'" name="orcid">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="email_mailing_lists">E-Mail for Mailing Lists</label>
+                                <input class="form-control" type="email" value="<%= user.email_mailing_lists %>" name="email_mailing_lists">
                             </div>
                             <br>
                             <button class="btn btn-info" type="submit">Submit</button>

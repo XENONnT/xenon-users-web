@@ -2,7 +2,7 @@
  * Scripts for authors and fulldirectory page
  */
 
-const INSTITUTES_ARRAY = [['Bologna'], ['Coimbra'], ['Columbia'], 
+const INSTITUTES_ARRAY = [['Bologna'], ['Bucknell'], ['Coimbra'], ['Columbia'], 
                           ['Freiburg', 'Bern/Freiburg'], ['KIT'], 
                           ['Kobe'], ["L'Aquila"], ['LAL'], 
                           ['LNGS-GSSI', 'LNGS'], ['LPNHE'], ['Mainz'], 
@@ -12,7 +12,7 @@ const INSTITUTES_ARRAY = [['Bologna'], ['Coimbra'], ['Columbia'],
                           ['Purdue'], ['Rensselear'], ['Rice'], ['Stockholm'], 
                           ['Subatech'], ['Tokyo'], ['Torino'], 
                           ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], 
-                          ['WIS', 'Weizmann'], ['Zurich']];
+                          ['UHD'], ['WIS', 'Weizmann'], ['Zurich']];
 const BASE_URL = '/shifts';
 
 // Makes DataTables table of current members in the fulldirectory page in 
@@ -521,6 +521,7 @@ function openModal(userInfo, page) {
     modal.find('.modal-body input[name="FirstName"]').val(userInfo.first_name);
     modal.find('.modal-body input[name="LastName"]').val(userInfo.last_name);
     modal.find('.modal-body input[name="Email"]').val(userInfo.email);
+    modal.find('.modal-body input[name="Email_Mailing_Lists"]').val(userInfo.email_mailing_lists);
     modal.find('.modal-body input[name="Time"]').val(userInfo.percent_xenon);
     modal.find('.modal-body input[name="Tasks"]').val(userInfo.tasks);
     if (userInfo.position){
@@ -599,6 +600,7 @@ function UpdateUserModal() {
     modal.find('.modal-body input[name="FirstName"]').val(userInfo.first_name);
     modal.find('.modal-body input[name="LastName"]').val(userInfo.last_name);
     modal.find('.modal-body input[name="Email"]').val(userInfo.email);
+    modal.find('.modal-body input[name="Email_Mailing_Lists"]').val(userInfo.email_mailing_lists);
     if (userInfo.position){
       modal.find('.modal-body select[name="position"]').val(userInfo.position).prop('selected', true);
     } else {
@@ -657,11 +659,11 @@ function Autocomplete(id, arr) {
   if (arr) {
     arr = arr.split(',');
   } else {
-    arr = ['Bologna', 'Coimbra', 'Columbia', 'Freiburg', 'KIT',
+      arr = ['Bologna', 'Bucknell', 'Coimbra', 'Columbia', 'Freiburg', 'KIT',
     'Kobe', "L'Aquila", 'LAL', 'LNGS-GSSI', 'LPNHE', 'Mainz',
     'MPI Heidelberg','Muenster', 'Nagoya', 'Naples', 'Nikhef',
     'NYUAD', 'Purdue', 'Rensselear', 'Rice', 'Stockholm', 'Subatech',
-    'Tokyo', 'Torino', 'UChicago', 'UCSD', 'WIS', 'Zurich'];
+	   'Tokyo', 'Torino', 'UChicago', 'UCSD', 'UHD', 'WIS', 'Zurich'];
   }
   $(id).autocomplete({
     source: function(request, response) {
