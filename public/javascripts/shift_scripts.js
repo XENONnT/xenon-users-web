@@ -15,10 +15,11 @@ function FillAggregates(tablediv, inputYear, myinstitute) {
     for (let i = 0; i < data.length; i++) {
       let countThisYear = 0;
       let institute = data[i];
-      let instituteYears = institute["years"];
+	let instituteYears = institute["years"];
+ //     if (typeof institute['_id'] === 'string' && institute['_id'] !== 'none') {	
       if (institute['_id'] !== "none") {
         html += '<tr';
-        // highlight user's institute
+          // highlight user's institute
         if (institute['_id'].includes(myinstitute)) {
           html += ' style="background-color:#cf6766;color:white"';
         }
@@ -37,6 +38,7 @@ function FillAggregates(tablediv, inputYear, myinstitute) {
         totalThisYear += countThisYear;
         html += '<td>' + countThisYear.toString() + '</td></tr>';
       }
+    //  }
     }
     // column with total counts
     html += "<tr style='border-bottom:1px solid black'><td colspan='100%'>" + 
@@ -349,10 +351,19 @@ function InitializeCalendar(daq_id, position, groups, user_institute) {
   $('#calendar').fullCalendar({
     events: 'shifts/get_shifts',
     timezone: 'UTC',
-    eventLimit: true,
+    eventLimit: 15,
     eventLimitClick: 'week',
+    eventOrder: "start,title",
+    customButtons: {
+	exportCSV: {
+	    text: 'Export CSV',
+	    click: function() {
+		exportCalendarToCSV();
+	    }
+	}
+    },      
     header: {
-      left: 'prev,next today',
+      left: 'prev,next today exportCSV',
       center: 'title',
       right: 'month,basicWeek'
     },
@@ -532,3 +543,33 @@ function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute,
     $('#markAvailableModal').modal('hide')
   })
 }
+
+function exportCalendarToCSV() {
+  var events = $('#calendar').fullCalendar('clientEvents');
+
+  var csv = 'Title,Start,End\n';
+
+  events.forEach(function(event) {
+    csv += '"' + event.title + '",'
+        + '"' + event.start.format() + '",'
+        + '"' + (event.end ? event.end.format() : '') + '"\n';
+  });
+
+  downloadCSV(csv, 'calendar-export.csv');
+}
+
+function downloadCSV(csv, filename) {
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+  var link = document.createElement('a');
+  var url = URL.createObjectURL(blob);
+
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  link.style.visibility = 'hidden';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+

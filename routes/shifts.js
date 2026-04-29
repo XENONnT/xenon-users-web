@@ -92,10 +92,13 @@ router.get('/get_shifts', ensureAuthenticated, function (req, res) {
   var end = new Date(q.end);
 
   collection.find({
-    "start": {
-      "$gt": start,
-      "$lt": end
-    }
+//    "start": {
+//      "$gt": start,
+//      "$lt": end
+//    }
+  $or: [
+    { start: { $lt: end }, end: { $gt: start } } // overlaps the range
+  ]      
   }).toArray(function (e, docs) {
     var ret = [];
     for (let i = 0; i < docs.length; i++) {
@@ -104,7 +107,8 @@ router.get('/get_shifts', ensureAuthenticated, function (req, res) {
         "start": doc['start'].toISOString().substr(0, 19),
         "end": doc['end'].toISOString().substr(0, 19),
         "title": doc['type'] + ': ' + doc['shifter'] +
-          '(' + doc['institute'] + ')',
+	      //          '(' + doc['institute'] + ') ' + doc['id_has_car'],
+	      '(' + doc['institute'] + ') ',
         "type": doc['type'],
         "available": doc['available'],
         "institute": doc['institute'],
@@ -123,7 +127,7 @@ router.get("/total_shift_aggregates", ensureAuthenticated, function (req, res) {
   collection.aggregate([{
       "$match": {
         "institute": {
-          "$ne": "none"
+          "$ne": "none", "$ne": null
         }
       }
     },

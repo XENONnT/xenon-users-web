@@ -2736,7 +2736,7 @@ exports.globalDefaults = {
     dropAccept: '*',
     eventOrder: 'title',
     // eventRenderWait: null,
-    eventLimit: false,
+    eventLimit: 15,
     eventLimitText: 'more',
     eventLimitClick: 'popover',
     dayPopoverFormat: 'LL',

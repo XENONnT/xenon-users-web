@@ -19,7 +19,7 @@
                 <li><a id="rules-tab" data-toggle="tab" href="#management" role="tab" aria-controls="rules" aria-selected="false">Shift Management</a></li>
             <%}%>
             <!-- For testing purposes -->
-            <% if (user.first_name == "Yvette" || user.last_name == "Tunnell" || user.last_name == "Schumann") { %>
+            <% if (user.last_name == "Scotto Lavina" || user.last_name == "Tunnell" || user.last_name == "Schumann") { %>
                 <li><a id="shift-calc" data-toggle="tab" href="#shiftcalc" role="tab">Shift Calculator</a></li>
             <%}%>
             
@@ -37,36 +37,38 @@
                     <div class="col-sm-4">
                         <h4 style="width:100%;background-color:#30415d;color:white;margin-top:5px;padding:10px; border-radius: 15px 15px 0px 0px">Institute Leaderboard</h4>
                         <table class="table-condensed" style="width:100%">
-                            <thead>
-                                <th>Institute</th>
-                                <th>Shifts all time</th>
-                                <th id="table_head_this_year">
-                                    <div class="dropdown">
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            <!-- <span id="the_year">2022</span> -->
-                                            <span id="the_year"><%= new Date().getFullYear()%></span>
-                                            <span class="caret"></span>
-                                        </button>
-                                        <!-- <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
-                                            <li><a href="#">2022</a></li>
-                                            <li><a href="#">2021</a></li>
-                                            <li><a href="#">2020</a></li>
-                                            <li><a href="#">2019</a></li>
-                                            <li><a href="#">2018</a></li>
-                                            <li><a href="#">2017</a></li>
-                                            <li><a href="#">2016</a></li>
-                                        </ul> -->
-                                        
-                                        <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
-                                            <% for(var yr = new Date(new Date().setFullYear(new Date().getFullYear() + 1)).getFullYear(); yr >= 2016; yr--) { %>
-                                                <li><a href="#"><%= yr%></a></li>
-                                            <% } %>
-                                        </ul>
-                                        
-                                    </div>
-                                </th>
-                            </thead>
-                            <tbody id="aggregate_table_body"></tbody>
+                          <thead>
+			    <tr>
+                              <th>Institute</th>
+                              <th>Shifts all time</th>
+                              <th id="table_head_this_year">
+                                <div class="dropdown">
+                                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <!-- <span id="the_year">2022</span> -->
+                                    <span id="the_year"><%= new Date().getFullYear()%></span>
+                                    <span class="caret"></span>
+                                  </button>
+                                  <!-- <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
+                                       <li><a href="#">2022</a></li>
+                                       <li><a href="#">2021</a></li>
+                                       <li><a href="#">2020</a></li>
+                                       <li><a href="#">2019</a></li>
+                                       <li><a href="#">2018</a></li>
+                                       <li><a href="#">2017</a></li>
+                                       <li><a href="#">2016</a></li>
+                                  </ul> -->
+                                  
+                                  <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
+                                    <% for(var yr = new Date(new Date().setFullYear(new Date().getFullYear() + 1)).getFullYear(); yr >= 2016; yr--) { %>
+                                    <li><a href="#"><%= yr%></a></li>
+                                    <% } %>
+                                  </ul>
+                                  
+                                </div>
+                              </th>
+			    </tr>
+                          </thead>
+                          <tbody id="aggregate_table_body"></tbody>
                         </table>
                     </div>
                     <div class="col-sm-8">
@@ -82,7 +84,7 @@
 
             <!-- Shift Calculations Tab -->
             <div class="tab-pane fade" id="shiftcalc" role="tabpanel">
-                <h2 style="width:100%;color:#333333;font-size:24px;">Shift Estimations</h4>
+                <h2 style="width:100%;color:#333333;font-size:24px;">Shift Estimations</h2>
                 <form action="" method="POST">
                     <table class="table-condensed" style="width:100%">
                         <thead>
@@ -527,7 +529,7 @@
     $(document).ready(async function() {
         const stats = await CalcEstShifts(`<%- JSON.stringify(instInfo) %>`);
         console.log(stats);
-        // initialize the table at current year
+    // initialize the table at current year
         FillAggregates("#aggregate_table_body", "<%= new Date().getFullYear() %>", "<%= user.institute %>");
         $('.dropdown-menu a').click(function(){
             $('#the_year').text($(this).text());
