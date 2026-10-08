@@ -90,6 +90,39 @@ function PendingUserMail(req, mailing_lists, callback) {
   });
 }
 
+function InformingUserMail(req, callback) {
+  var transporter = req.transporter;
+  var message = {
+    from: process.env.NOTIFS_ACCOUNT,
+    to: req.body.email,
+    cc: ['scotto@lpnhe.in2p3.fr', 'alfredo.ferella@aquila.infn.it'],
+    subject: 'Instructions for the registration of XENON services',
+    html: '<div>Dear ' + req.body.FirstName + ',</div>' +
+      '<div>Welcome to the XENON Collaboration!</div>' +
+      '<br>' +
+      '<div>Before you can access any XENON tools, you will need to complete a few steps involving the INFN/LNGS account system.</div>' +
+      '<div>We prepared a <a href="https://box.in2p3.fr/s/TN4gJ3F8fgze7xf">short guide</a> with everything you need to do.</div>' +
+      '<br>' +
+      '<div>Please follow the steps in the document carefully.</div>' +
+      '<div>You will receive another email from us once your XENON wiki access is active.</div>' +
+      '<div>We are happy to have you with us!</div>' +
+      '<br>' +
+      '<div>Best regards,<br>' +
+      'The XENON Collaboration</div>'
+  };
+    
+  transporter.sendMail(message, function(error, info) {
+    if (error) {
+      console.log(error);
+      callback(false);
+    } else {
+      console.log('Message sent ' + info.message);
+      callback(true);
+    }
+  });
+}
+
+
 function ApproveUserMail(req, callback) {
   var transporter = req.transporter;
   var message = {
@@ -458,6 +491,59 @@ router.post('/adduser', ensureAuthenticated, function(req, res) {
   }
 });
 
+/*
+router.get('/send-test-email', ensureAuthenticated, function(req, res) {
+  var db = req.xenonnt_db;
+  var idoc = {};
+  var mailing_lists = '';
+  if (req.body.mlist != null && Array.isArray(req.body.mlist)) {
+    var lists = req.body.mlist;
+  } else {
+    if (req.body.mlist != null) {
+      var lists = [req.body.mlist]
+    } else {
+      var lists = []
+    }
+  }
+  console.log(lists);
+//  lists.push('xe-all');
+  idoc['pending'] = true;
+  idoc['req_date'] = new Date();
+  idoc['first_name'] = req.body.FirstName;
+  idoc['last_name'] = req.body.LastName;
+  idoc['email'] = req.body.Email;
+  idoc['email_mailing_lists'] = req.body.Email_Mailing_Lists;
+  idoc['institute'] = req.body.institute;
+  idoc['position'] = req.body.position;
+  idoc['percent_xenon'] = req.body.Time;
+  if(req.body.StartDate != '') {
+    idoc['start_date'] = new Date(req.body.StartDate);
+  }
+  if (req.body.expectedEnd != "" && req.body.expectedEnd != null) {
+    idoc['end_date'] = new Date(req.body.expectedEnd);
+  }
+
+  if (req.body.position === "PhD Student") {
+    lists.push('xe-junior');
+  }
+  idoc['mailing_lists'] = lists;
+  idoc['tasks'] = req.body.Tasks;
+
+  mailing_lists += lists.join(", ")
+
+  InformingUserMail(
+    req,
+    function(success) {
+      if (success) {
+        res.status(200).send('Email sent successfully!');
+      } else {
+        res.status(500).send('Failed to send email.');
+      }
+    }
+  );
+});
+*/
+
 router.post('/pendinguser', function(req, res) {
   var db = req.xenonnt_db;
   var idoc = {};
@@ -522,6 +608,19 @@ router.post('/pendinguser', function(req, res) {
     });
   } catch (e) {
     console.log(e);
+  }
+
+  // sends an e-mail to the new user with the instructions
+  try {
+      InformingUserMail(req, function(success) {
+	  if (success) {
+	      console.log("Email sent successfully!");
+	  } else {
+	      console.log("error. Could not send email.");
+	  }
+      });
+  } catch (e) {
+      console.log(e);
   }
 });
 

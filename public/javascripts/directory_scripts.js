@@ -8,8 +8,10 @@ const INSTITUTES_ARRAY = [['Bologna'], ['Bucknell'], ['Coimbra'], ['Columbia'],
                           ['LNGS-GSSI', 'LNGS'], ['LPNHE'], ['Mainz'], 
                           ['MPI Heidelberg', 'MPIK Heidelberg'], 
                           ['Munster', 'Muenster'], ['Nagoya'], 
-                          ['Naples', 'INFN Naples'], ['Nikhef'], ['NYUAD'], 
-                          ['Purdue'], ['Rensselear'], ['Rice'], ['Stockholm'], 
+                          ['Naples', 'INFN Naples'], ['NIE Singapore'],
+			  ['Nikhef'], ['NYUAD'], 
+                          ['Purdue'], ['Rensselear'], ['Rice'], ['Rome'], ['Science Tokyo'],
+			  ['Stockholm'], 
                           ['Subatech'], ['Tokyo'], ['Torino'], 
                           ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], 
                           ['UHD'], ['WIS', 'Weizmann'], ['Zurich']];
@@ -51,6 +53,7 @@ function InitializeTable(tablediv) {
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
       { data: "start_date"},
+      { data: "end_date"},
       { data: "cell", defaultContent: '', orderable: false},
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "last_modified", defaultContent: ''},
@@ -66,13 +69,14 @@ function InitializeTable(tablediv) {
       { title: 'Position', targets: 6 },
       { title: 'Time', targets: 7 },
       { title: 'Start Date', targets: 8 },
-      { title: 'Phone Number', targets: 9 },
+      { title: 'End Date', targets: 9 },
+      { title: 'Phone Number', targets: 10 },
       { title: 'Explanations <button type="button" class="btn btn-sm"' +
         'data-html="true" data-toggle="tooltip" data-placement="right" id="explanations"' +
         'data-original-title="Date of moving between institutes and comments on other ' +
         'status changes" style="border-radius:25px;border:transparent;padding:0px 5px;">' +
-        '<i class="fas fa-question"></i></button>', targets: 10 },
-      { visible: false, targets: 11 },
+        '<i class="fas fa-question"></i></button>', targets: 11 },
+      { visible: false, targets: 12 },
       { targets: -1,
         data: null,
         defaultContent: "<button type='button' class='btn-circle'>" + 
@@ -86,6 +90,22 @@ function InitializeTable(tablediv) {
           }
           return moment(data).tz('Atlantic/St_Helena').format('MMM YYYY');
         }
+      },
+      {	targets: [9],
+	render: function(data) {
+	  if (typeof(data) === 'undefined') {
+	    return '';
+	  }
+	  const formattedDate = moment(data).tz('Atlantic/St_Helena').format('MMM YYYY');
+	  const today = moment().tz('Atlantic/St_Helena').startOf('day');
+	  const inputDate = moment(data).tz('Atlantic/St_Helena').startOf('day');
+
+	  if (inputDate.isBefore(today)) {
+	    return `<span style="color: red;">${formattedDate}</span>`;
+	  } else {
+	    return formattedDate;
+	  }
+	}
       }
     ],
     createdRow: function(row, data, index) {
@@ -105,7 +125,7 @@ function InitializeTable(tablediv) {
       api.column(groupColumn, {page: 'current'}).data().each(function(group,i) {
         if (last !== group) {
           $(rows).eq(i).before(
-            '<tr class="group"><td colspan="10"><strong>' + group + 
+            '<tr class="group"><td colspan="12"><strong>' + group + 
               '</strong></td></tr>'
           )
           last = group;
@@ -660,10 +680,10 @@ function Autocomplete(id, arr) {
     arr = arr.split(',');
   } else {
       arr = ['Bologna', 'Bucknell', 'Coimbra', 'Columbia', 'Freiburg', 'KIT',
-    'Kobe', "L'Aquila", 'LAL', 'LNGS-GSSI', 'LPNHE', 'Mainz',
-    'MPI Heidelberg','Muenster', 'Nagoya', 'Naples', 'Nikhef',
-    'NYUAD', 'Purdue', 'Rensselear', 'Rice', 'Stockholm', 'Subatech',
-	   'Tokyo', 'Torino', 'UChicago', 'UCSD', 'UHD', 'WIS', 'Zurich'];
+	     'Kobe', "L'Aquila", 'LAL', 'LNGS-GSSI', 'LPNHE', 'Mainz',
+	     'MPI Heidelberg','Muenster', 'Nagoya', 'Naples', 'NIE Singapore', 'Nikhef',
+	     'NYUAD', 'Purdue', 'Rensselear', 'Rice', 'Rome', 'Science Tokyo', 'Stockholm', 'Subatech',
+	     'Tokyo', 'Torino', 'UChicago', 'UCSD', 'UHD', 'WIS', 'Zurich'];
   }
   $(id).autocomplete({
     source: function(request, response) {

@@ -4,26 +4,37 @@
 </ul>
   
 <div class="tab-content">
+
   <div id="current" class="tab-pane fade in active">
-    <% for (i = 0; i < curr.length; i++) {%>
+    <% for (i = 0; i < curr.length; i++) {
+      // Parse the end_date to compare with today
+      const endDate = new Date(curr[i].end_date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Normalize today to midnight for accurate comparison
+
+      // Determine if the end_date is older than today
+      const isExpired = endDate < today;
+    %>
       <details>
-        <summary> <%=curr[i].last_name + ", " + curr[i].first_name %></summary>
-        <p>
-          <b>Institute: </b><%= curr[i].institute %><br>
-          <b>E-Mail: </b><%= curr[i].email%> <br>
-          <b>Position: </b><%= curr[i].position%> <br>
-          <b>Start Date: </b><%= curr[i].start_date%><br>
-          <b>End Date: </b><%= curr[i].end_date%><br>
-          <b>E-Mail Mailing Lists: </b><%= curr[i].email_mailing_lists%><br>
-          <b>Lists: </b><%= JSON.stringify(curr[i].mailing_lists)%>
+	<summary<%- isExpired ? ' style="color: red;"' : '' %>>
+	  <%= curr[i].last_name + ", " + curr[i].first_name %>
+	</summary>
+	<p>
+	  <b>Institute: </b><%= curr[i].institute %><br>
+	  <b>E-Mail: </b><%= curr[i].email %><br>
+	  <b>Position: </b><%= curr[i].position %><br>
+	  <b>Start Date: </b><%= curr[i].start_date %><br>
+	  <b>End Date: </b><%= curr[i].end_date %><br>
+	  <b>E-Mail Mailing Lists: </b><%= curr[i].email_mailing_lists %><br>
+	  <b>Lists: </b><%= JSON.stringify(curr[i].mailing_lists) %>
 	</p>
-        <br>
-        <!-- make this button available only if authorized as admin/PI-->
-        <% if ((user.position == "PI")) {%>
-          <button id="btn-ManageAcct" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateUserModal" data-id="<%= JSON.stringify(curr[i]) %>" >Manage Account</button>
-        <%}%>
+	<br>
+	<!-- Make this button available only if authorized as admin/PI -->
+	<% if (user.position == "PI") { %>
+	  <button id="btn-ManageAcct" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateUserModal" data-id="<%= JSON.stringify(curr[i]) %>">Manage Account</button>
+	<% } %>
       </details>
-    <%}%>
+    <% } %>
   </div>
   <div id="previous" class="tab-pane fade">
     <% for (i = 0; i < prev.length; i++) {%>
